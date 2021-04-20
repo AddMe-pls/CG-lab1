@@ -145,10 +145,12 @@ public:
 	{
 		radius = rad;
 		std::size_t len = getLen();
-		for (int i = 0; i < len; i++)
+		if (data)
 		{
-			data[i] = dataK[i];
+			data.reset();
 		}
+		data = std::make_unique<float[]>(len);
+		std::copy(dataK, dataK + len, data.get());
 	}
 	float operator [](std::size_t id) const
 	{
@@ -413,6 +415,7 @@ protected:
 	QColor calcNewPixelColor(const QImage& img, int x, int y) const override;
 public:
 	Dilation(std::size_t radius = 1) :MatrixFilter(DilationKernel(radius)) {}
+	Dilation(Kernel& ker) :MatrixFilter(ker) {}
 };
 
 class Erosion : public MatrixFilter
@@ -421,6 +424,7 @@ protected:
 	QColor calcNewPixelColor(const QImage& img, int x, int y) const override;
 public:
 	Erosion(std::size_t radius = 1) : MatrixFilter(ErosionKernel(radius)) {}
+	Erosion(Kernel& ker) :MatrixFilter(ker) {}
 };
 
 class Opening : public MatrixFilter
@@ -429,6 +433,7 @@ protected:
 	QColor calcNewPixelColor(const QImage& img, int x, int y) const override;
 public:
 	Opening(std::size_t radius = 1) : MatrixFilter(OpeningKernel(radius)) {}
+	Opening(Kernel& ker) :MatrixFilter(ker) {}
 	QImage process(const QImage& img) const;
 };
 
@@ -438,6 +443,7 @@ protected:
 	QColor calcNewPixelColor(const QImage& img, int x, int y) const override;
 public:
 	Closing(std::size_t radius = 1) : MatrixFilter(ClosingKernel(radius)) {}
+	Closing(Kernel& ker) :MatrixFilter(ker) {}
 	QImage process(const QImage& img) const;
 };
 
@@ -447,6 +453,7 @@ protected:
 	QColor calcNewPixelColor(const QImage& img, int x, int y) const override;
 public:
 	Grad(std::size_t radius = 1) : MatrixFilter(GradKernel(radius)) {}
+	Grad(Kernel& ker) :MatrixFilter(ker) {}
 	QImage process(const QImage& img) const;
 };
 

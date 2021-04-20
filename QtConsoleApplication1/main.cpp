@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 
     img.load(QString(s.c_str()));
     img.save("Images/Source.png");
-    /*
+    
     char size[80];
     std::ifstream ifs("KernelM.txt");
     ifs.getline(size, 3, '\n');
@@ -27,12 +27,11 @@ int main(int argc, char* argv[])
 
     for (int i = 0; i < sizei * sizei; i++)
     {
-        ifs.getline(size, 1, '\n');
+        ifs.getline(size, 2, '\n');
         tmp[i] = std::atoi(size);
     }
 
     MatKernel.SetKernel(tmp.get(), sizei / 2);
-    */
     
     InvertFilter invert;
     invert.process(img).save("Images/Invert.png");
@@ -70,22 +69,22 @@ int main(int argc, char* argv[])
     MotionBlur motblur;
     motblur.process(img).save("Images/MotionBlur.png");
     
-    Dilation dil;
+    Dilation dil(MatKernel);
     dil.process(img).save("Images/Dilation.png");
     
-    Erosion eros;
+    Erosion eros(MatKernel);
     eros.process(img).save("Images/Erosion.png");
     
-    Opening op;
+    Opening op(MatKernel);
     op.process(img).save("Images/Opening.png");
     
-    Closing cl;
+    Closing cl(MatKernel);
     cl.process(img).save("Images/Closing.png");
     
     LinealStretching lin(img);
     lin.process(img).save("Images/LinealStretching.png");
     
-    Grad grad;
+    Grad grad(MatKernel);
     grad.process(img).save("Images/Gradient.png");
     
     Median med;
